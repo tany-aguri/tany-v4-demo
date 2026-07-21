@@ -1,4 +1,4 @@
-const CACHE = 'tany-v5-demo-1';
+const CACHE = 'tany-v6-demo-1';
 const ASSETS = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));

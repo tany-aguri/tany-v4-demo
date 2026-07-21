@@ -33,16 +33,25 @@ function render(){
 }
 function renderHome(){
   main.innerHTML=`
-    <section class="greeting"><h2>おはようございます</h2><p>7月21日・tany農園の今日を確認しましょう。</p></section>
+    <section class="review-banner"><b>v6 レビュー版</b><span>仮キャラクター表示確認</span></section><section class="greeting"><h2>おはようございます</h2><p>7月21日・tany農園の今日を確認しましょう。</p></section>
     <section class="card tany-card">
-      <div class="tany-head"><div class="mascot" aria-label="tany仮キャラクター"><i class="stem"></i><i class="leaf-a"></i><i class="leaf-b"></i><div class="face"><i class="smile"></i></div></div><div class="tany-copy"><span class="badge">tanyから</span><h2>朝の涼しいうちに収穫しよう</h2><p>トマトとピーマンを先に確認。水やりは土の乾きを見てからで大丈夫です。</p></div></div>
+      <div class="tany-head"><div class="mascot-v6" aria-label="tany仮キャラクター">
+<svg viewBox="0 0 120 120" role="img" aria-label="葉っぱの帽子をかぶったtany">
+<path d="M58 34 C50 18 34 14 23 22 C31 37 43 43 58 42" fill="#6f9168"/>
+<path d="M61 33 C68 16 84 13 97 22 C90 37 76 43 61 42" fill="#86a978"/>
+<path d="M60 39 C61 31 62 25 66 18" stroke="#55705a" stroke-width="5" stroke-linecap="round"/>
+<circle cx="60" cy="70" r="35" fill="#fff9ec" stroke="#d9cdbb" stroke-width="3"/>
+<circle cx="48" cy="67" r="4" fill="#4b4339"/><circle cx="72" cy="67" r="4" fill="#4b4339"/>
+<path d="M48 81 Q60 91 72 81" fill="none" stroke="#4b4339" stroke-width="4" stroke-linecap="round"/>
+<circle cx="39" cy="76" r="5" fill="#e8b7a8" opacity=".65"/><circle cx="81" cy="76" r="5" fill="#e8b7a8" opacity=".65"/>
+</svg><span>仮キャラ</span></div><div class="tany-copy"><span class="badge">tanyから</span><h2>朝の涼しいうちに収穫しよう</h2><p>トマトとピーマンを先に確認。水やりは土の乾きを見てからで大丈夫です。</p></div></div>
       <div class="today-status"><div class="status-pill"><b>晴れ・31℃</b><span>降水10%</span></div><div class="status-pill"><b>収穫 2種</b><span>おすすめ</span></div><div class="status-pill"><b>作業 3件</b><span>${state.tasks.filter(Boolean).length}件完了</span></div></div>
     </section>
     <button id="quickHarvest" class="quick-action"><span class="qa-icon">収</span><span><strong>収穫を記録する</strong><small>ミニトマト・約30秒</small></span><span class="arrow">›</span></button>
     <div class="section-head"><h2>今日やること</h2><span class="tiny muted">${state.tasks.filter(Boolean).length}/3 完了</span></div>
     <section class="card task-card">${['トマトとピーマンを収穫','スイカの実と保護カゴを確認','乾いている株だけ水やり'].map((t,i)=>`<label class="task"><input type="checkbox" data-task="${i}" ${state.tasks[i]?'checked':''}><span><strong>${t}</strong><span>${i===0?'朝の涼しい時間に':i===1?'食害と接地面を見る':'表土と葉の様子で判断'}</span></span></label>`).join('')}</section>
     <div class="section-head"><h2>今日の一枚</h2><span class="tiny muted">7月21日</span></div>
-    <section class="hero-photo"><div><strong>夏の畑が色づいてきた</strong><p>写真を中心に、今日の農園を残します。</p><span class="version-chip">v5 仮ビジュアル</span></div></section>`;
+    <section class="hero-photo"><div><strong>夏の畑が色づいてきた</strong><p>写真を中心に、今日の農園を残します。</p><span class="version-chip">v6 レビュー版</span></div></section>`;
   $('#quickHarvest').onclick=()=>{state.selectedCrop='tomato';state.harvestCount=3;navigate('harvest')};
   main.querySelectorAll('[data-task]').forEach(el=>el.onchange=()=>{state.tasks[+el.dataset.task]=el.checked;localStorage.setItem('tanyTasks',JSON.stringify(state.tasks));renderHome();toast('今日やることを更新しました')});
 }
@@ -68,7 +77,16 @@ function renderHarvest(){const c=crops[state.selectedCrop];main.innerHTML=`
   $('#saveHarvest').onclick=()=>{const rec={id:Date.now(),crop:state.selectedCrop,count:state.harvestCount,memo:$('#harvestMemo').value,date:'7月21日',footprint:''};state.journal.unshift(rec);localStorage.setItem('tanyJournal',JSON.stringify(state.journal));state.currentRecord=rec.id;navigate('footprint');};
 }
 function renderFootprint(){main.innerHTML=`
-  <section class="card"><div class="tany-head"><div class="mascot" style="transform:scale(.72);transform-origin:left center"><i class="stem"></i><i class="leaf-a"></i><i class="leaf-b"></i><div class="face"><i class="smile"></i></div></div><div><h2>足あとを添えますか？</h2><p class="tiny muted">任意です。書かなくても収穫記録は保存済みです。</p></div></div><div class="form-group" style="margin-top:18px"><label>一言</label><textarea id="footText" maxlength="80" placeholder="例：妻と一緒に収穫できた"></textarea></div><label class="tiny muted">候補から選ぶ</label><div class="chips" style="margin-top:8px">${['妻と収穫','今年初収穫','おすそ分け','雨上がり'].map(x=>`<button class="chip">${x}</button>`).join('')}</div></section>
+  <section class="card"><div class="tany-head"><div class="mascot-v6 small" aria-label="tany仮キャラクター">
+<svg viewBox="0 0 120 120" role="img" aria-label="葉っぱの帽子をかぶったtany">
+<path d="M58 34 C50 18 34 14 23 22 C31 37 43 43 58 42" fill="#6f9168"/>
+<path d="M61 33 C68 16 84 13 97 22 C90 37 76 43 61 42" fill="#86a978"/>
+<path d="M60 39 C61 31 62 25 66 18" stroke="#55705a" stroke-width="5" stroke-linecap="round"/>
+<circle cx="60" cy="70" r="35" fill="#fff9ec" stroke="#d9cdbb" stroke-width="3"/>
+<circle cx="48" cy="67" r="4" fill="#4b4339"/><circle cx="72" cy="67" r="4" fill="#4b4339"/>
+<path d="M48 81 Q60 91 72 81" fill="none" stroke="#4b4339" stroke-width="4" stroke-linecap="round"/>
+<circle cx="39" cy="76" r="5" fill="#e8b7a8" opacity=".65"/><circle cx="81" cy="76" r="5" fill="#e8b7a8" opacity=".65"/>
+</svg><span>仮キャラ</span></div><div><h2>足あとを添えますか？</h2><p class="tiny muted">任意です。書かなくても収穫記録は保存済みです。</p></div></div><div class="form-group" style="margin-top:18px"><label>一言</label><textarea id="footText" maxlength="80" placeholder="例：妻と一緒に収穫できた"></textarea></div><label class="tiny muted">候補から選ぶ</label><div class="chips" style="margin-top:8px">${['妻と収穫','今年初収穫','おすそ分け','雨上がり'].map(x=>`<button class="chip">${x}</button>`).join('')}</div></section>
   <div class="button-row modal-actions"><button id="skipFoot" class="ghost">今は追加しない</button><button id="saveFoot" class="primary">足あとを保存</button></div>`;
   main.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{main.querySelectorAll('.chip').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');$('#footText').value=b.textContent});
   $('#skipFoot').onclick=()=>{toast('収穫記録を保存しました');navigate('journal',true)}; $('#saveFoot').onclick=()=>{const r=state.journal.find(x=>x.id===state.currentRecord);if(r)r.footprint=$('#footText').value.trim();localStorage.setItem('tanyJournal',JSON.stringify(state.journal));toast('足あとを保存しました');navigate('journal',true)};
