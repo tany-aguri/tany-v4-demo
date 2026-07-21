@@ -1,0 +1,11 @@
+{
+  "name": "tany農園 v4 デモ",
+  "short_name": "tany",
+  "description": "tany農園アプリの操作確認用デモ",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#F7F2E8",
+  "theme_color": "#55705A",
+  "lang": "ja",
+  "icons": []
+}
