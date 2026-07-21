@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
-  <meta name="theme-color" content="#F5F0E6" />
-  <title>tany農園 v4 デモ</title>
+  <meta name="theme-color" content="#F4EFE4" />
+  <title>tany農園 v5 デモ</title>
   <meta name="description" content="tany農園アプリの操作確認用デモ" />
   <meta name="robots" content="noindex,nofollow,noarchive" />
   <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="tany" />
@@ -16,22 +17,23 @@
 <body>
   <div id="app" class="app-shell">
     <div id="splash" class="splash" aria-label="起動画面">
-      <div class="sprout">🌱</div><h1>tany農園</h1><p>暮らしを育てる。</p>
+      <div class="brand-mark" aria-hidden="true"><span></span><i></i><b></b></div>
+      <h1>tany農園</h1><p>暮らしを育てる。</p>
     </div>
 
     <header id="appHeader" class="app-header hidden">
       <button id="backButton" class="icon-button hidden" aria-label="戻る">‹</button>
       <div><p id="eyebrow" class="eyebrow">tany農園</p><h1 id="pageTitle">Home</h1></div>
-      <button id="settingsButton" class="icon-button" aria-label="設定">⚙︎</button>
+      <button id="settingsButton" class="icon-button settings-icon" aria-label="設定">⚙︎</button>
     </header>
 
     <main id="main" class="main hidden" aria-live="polite"></main>
 
     <nav id="tabbar" class="tabbar hidden" aria-label="メインナビゲーション">
-      <button data-tab="home" class="tab active"><span>⌂</span><small>Home</small></button>
-      <button data-tab="crops" class="tab"><span>♧</span><small>栽培</small></button>
-      <button data-tab="journal" class="tab"><span>▤</span><small>日誌</small></button>
-      <button data-tab="library" class="tab"><span>▱</span><small>図鑑</small></button>
+      <button data-tab="home" class="tab active"><span class="nav-icon">⌂</span><small>Home</small></button>
+      <button data-tab="crops" class="tab"><span class="nav-icon">♧</span><small>栽培</small></button>
+      <button data-tab="journal" class="tab"><span class="nav-icon">▤</span><small>日誌</small></button>
+      <button data-tab="library" class="tab"><span class="nav-icon">▱</span><small>図鑑</small></button>
     </nav>
 
     <div id="toast" class="toast" role="status"></div>

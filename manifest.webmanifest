@@ -1,11 +1,10 @@
 {
-  "name": "tany農園 v4 デモ",
-  "short_name": "tany",
-  "description": "tany農園アプリの操作確認用デモ",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#F7F2E8",
-  "theme_color": "#55705A",
-  "lang": "ja",
-  "icons": []
+  "name":"tany農園",
+  "short_name":"tany",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#F4EFE4",
+  "theme_color":"#F4EFE4",
+  "description":"暮らしを育てる、tany農園の記録アプリ",
+  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
 }
