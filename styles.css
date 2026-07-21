@@ -54,3 +54,46 @@ button{color:inherit}
 .toast{position:fixed;z-index:80;left:50%;bottom:calc(102px + var(--safe-bottom));transform:translate(-50%,15px);background:#28332a;color:white;border-radius:99px;padding:11px 17px;font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.25s;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
 .modal-backdrop{position:fixed;z-index:60;inset:0;background:rgba(27,35,29,.32);display:flex;align-items:flex-end;justify-content:center}.sheet{width:min(520px,100%);max-height:84dvh;overflow:auto;background:var(--bg);border-radius:28px 28px 0 0;padding:12px 18px calc(24px + var(--safe-bottom));animation:up .25s ease}@keyframes up{from{transform:translateY(30px);opacity:.4}}.sheet-handle{width:40px;height:5px;border-radius:99px;background:#c9c5ba;margin:0 auto 17px}.sheet h2{font-size:21px;margin:0 0 15px}
 @media(min-width:540px){body{padding:20px}.app-shell{min-height:calc(100dvh - 40px);border-radius:34px;box-shadow:0 20px 70px rgba(37,50,40,.16);overflow:hidden}.tabbar{bottom:20px;border-radius:0 0 34px 34px}.app-header{border-radius:34px 34px 0 0}.toast{bottom:125px}}
+
+/* v10: 重複整理・栽培工程・案内役 */
+.app-header{grid-template-columns:42px 1fr 42px;position:sticky}
+#settingsButton{grid-column:3;justify-self:end}
+.home-welcome{display:grid;grid-template-columns:1fr 118px;gap:12px;align-items:end;padding:5px 2px 14px}
+.home-welcome h2{font-size:25px;line-height:1.25;margin:9px 0 5px}.home-welcome p{font-size:13px;line-height:1.6;color:var(--muted);margin:0}.home-welcome img{width:118px;height:108px;object-fit:cover;object-position:center 15%;border-radius:24px;border:1px solid rgba(226,219,206,.85);box-shadow:var(--shadow)}
+.season-pill{display:inline-block;padding:5px 9px;border-radius:99px;background:var(--green-soft);color:var(--green-dark);font-size:10px;font-weight:900}
+.home-message{padding:0;background:linear-gradient(145deg,#e5ecdc,#f6edd8)}
+.life-cycle{display:grid;grid-template-columns:repeat(var(--steps),1fr);position:relative;margin:22px 0 10px;gap:0}
+.life-cycle:before{content:"";position:absolute;left:calc(50% / var(--steps));right:calc(50% / var(--steps));top:10px;height:3px;background:#ddd9ce;border-radius:99px}
+.life-cycle:after{content:"";position:absolute;left:calc(50% / var(--steps));top:10px;height:3px;width:calc((100% - (100% / var(--steps))) * (var(--current, .5)));background:var(--green);border-radius:99px}
+.life-step{z-index:1;text-align:center;min-width:0}.life-dot{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;margin:0 auto 7px;background:#ece8de;border:2px solid #d9d3c6;color:#908b82;font-size:9px;font-weight:900}.life-step.done .life-dot,.life-step.current .life-dot{background:var(--green);border-color:var(--green);color:white}.life-step.current .life-dot{box-shadow:0 0 0 5px rgba(79,118,87,.14)}.life-name{display:block;font-size:10px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.life-step small{display:block;color:var(--muted);font-size:9px;margin-top:3px}
+.life-cycle.compact{margin:10px 0 0}.life-cycle.compact:before{top:5px}.life-cycle.compact .life-dot{width:11px;height:11px;font-size:0;border-width:1.5px;margin-bottom:4px}.life-cycle.compact .life-name{font-size:8px}.next-stage{display:block;color:var(--green-dark);font-size:10px;font-weight:800;margin-top:7px}
+.calendar-card{margin-top:14px;padding:18px}.calendar-title{display:flex;align-items:center;justify-content:space-between}.calendar-title span{display:block;font-size:11px;color:var(--green-dark);font-weight:900}.calendar-title strong{display:block;font-size:18px;margin-top:3px}.calendar-title button{border:0;background:var(--green-soft);color:var(--green-dark);font-size:11px;font-weight:900;padding:8px 11px;border-radius:99px}
+.calendar-summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.calendar-summary div{background:#f3f0e7;border-radius:15px;padding:12px}.calendar-summary span{display:block;color:var(--muted);font-size:10px;font-weight:800}.calendar-summary strong{display:block;font-size:13px;margin-top:5px}
+.stage-details{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}.stage-detail-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}.stage-detail-head button{border:0;background:none;font-size:24px;color:var(--muted)}.stage-detail-row{display:grid;grid-template-columns:20px 1fr auto;gap:7px;padding:10px 0;border-bottom:1px solid var(--line);font-size:12px}.stage-detail-row time{color:var(--muted)}.stage-detail-row.done>span,.stage-detail-row.current>span{color:var(--green);font-weight:900}.stage-details>p{font-size:10px;line-height:1.55;color:var(--muted);margin:12px 0 0}
+.crop-detail-head{padding-bottom:20px}.gentle-tip{margin-top:14px}.gentle-tip span{font-size:10px;font-weight:900;color:var(--green-dark)}.gentle-tip p{margin:7px 0 0;font-size:13px;line-height:1.6}
+.records-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.records-head>div{min-width:0}.compact-add{border:0;border-radius:15px;background:var(--green-dark);color:white;display:flex;align-items:center;gap:4px;padding:9px 11px;font-weight:900;font-size:18px;white-space:nowrap}.compact-add span{font-size:11px}
+.ai-subtle{display:flex;margin:18px auto 0;border:0;background:none;color:#8d938d;font-size:11px;gap:7px;padding:8px 12px}
+@media(max-width:360px){.home-welcome{grid-template-columns:1fr 96px}.home-welcome img{width:96px;height:96px}.life-name{font-size:9px}.calendar-summary{grid-template-columns:1fr}}
+
+/* v11 refinements */
+.home-welcome{align-items:center}
+.welcome-copy{min-width:0}
+.guide-frame{width:118px;flex:0 0 118px;text-align:center}
+.guide-frame img{display:block;width:108px;height:108px;object-fit:contain;margin:auto;filter:drop-shadow(0 8px 12px rgba(48,69,50,.12))}
+.guide-frame span{display:block;margin-top:2px;font-size:9px;font-weight:800;color:var(--muted);letter-spacing:.03em}
+.calendar-summary{grid-template-columns:repeat(3,1fr)}
+.seed-plan{margin:14px 0 2px;padding:14px;border-radius:15px;background:#f2eee1;border:1px solid var(--line)}
+.seed-plan>span{display:block;color:var(--muted);font-size:11px;font-weight:800}
+.seed-plan>strong{display:block;margin-top:4px;font-size:15px}
+.seed-plan>p{margin:5px 0 0!important;font-size:12px!important;line-height:1.6}
+.ai-subtle{display:grid!important;grid-template-columns:1fr auto;grid-template-areas:'label arrow' 'small arrow';align-items:center;text-align:left;gap:0 8px}
+.ai-subtle>span{grid-area:label;font-weight:700}
+.ai-subtle>small{grid-area:small;color:var(--muted);font-size:10px;margin-top:2px}
+.ai-subtle>b{grid-area:arrow;font-size:18px;font-weight:400}
+@media(max-width:370px){.guide-frame{width:96px;flex-basis:96px}.guide-frame img{width:90px;height:90px}.calendar-summary{grid-template-columns:1fr}.calendar-summary>div+div{border-left:0;border-top:1px solid var(--line)}}
+/* v12: 奥様の手描きイラストをHomeの主役として正式反映 */
+.home-welcome{display:grid;grid-template-columns:minmax(0,1fr) 142px;gap:14px;align-items:center;margin:4px 0 16px}
+.guide-frame.wife-art{width:142px;min-height:164px;padding:7px 7px 9px;background:#f2eddf;border:1px solid rgba(196,184,161,.72);box-shadow:0 11px 25px rgba(71,62,46,.11);transform:rotate(1deg);overflow:hidden}
+.guide-frame.wife-art img{width:100%;height:133px;display:block;object-fit:cover;object-position:center;background:#eee8da;border-radius:13px;filter:sepia(.06) saturate(.82) contrast(1.03)}
+.guide-frame.wife-art span{display:block;margin-top:7px;font-size:9px;line-height:1.35;color:#776f63;font-weight:800;text-align:center;letter-spacing:.02em}
+@media (max-width:370px){.home-welcome{grid-template-columns:minmax(0,1fr) 124px}.guide-frame.wife-art{width:124px;min-height:150px}.guide-frame.wife-art img{height:120px}.welcome-copy h2{font-size:22px}}
