@@ -2,10 +2,10 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
-  <meta name="theme-color" content="#F4EFE4" />
-  <title>tany農園 v8 レビュー版</title>
-  <meta name="description" content="tany農園アプリ v8 妻レビュー反映デモ" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#F6F3EA" />
+  <title>tany農園 v9 UI完成版</title>
+  <meta name="description" content="今日も畑へ行きたくなる、tany農園アプリのUI完成版プロトタイプ" />
   <meta name="robots" content="noindex,nofollow,noarchive" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
@@ -17,28 +17,43 @@
 <body>
   <div id="app" class="app-shell">
     <div id="splash" class="splash" aria-label="起動画面">
-      <div class="brand-mark" aria-hidden="true"><span></span><i></i><b></b></div>
-      <h1>tany農園</h1><p>暮らしを育てる。</p>
+      <div class="logo-seed" aria-hidden="true"><i></i><span></span><b></b></div>
+      <h1>tany農園</h1>
+      <p>暮らしを育てる。</p>
     </div>
 
     <header id="appHeader" class="app-header hidden">
-      <button id="backButton" class="icon-button hidden" aria-label="戻る">‹</button>
-      <div><p id="eyebrow" class="eyebrow">tany農園</p><h1 id="pageTitle">Home</h1></div>
-      <button id="settingsButton" class="icon-button settings-icon" aria-label="設定">⚙︎</button>
+      <button id="backButton" class="icon-button hidden" aria-label="戻る">
+        <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <div class="header-title">
+        <span id="eyebrow" class="eyebrow">tany農園</span>
+        <h1 id="pageTitle">Home</h1>
+      </div>
+      <button id="settingsButton" class="icon-button" aria-label="設定">
+        <svg viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.04 1.56V19.6h-2v-.08a1.7 1.7 0 0 0-1.04-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06L9 16.94l.06-.06A1.7 1.7 0 0 0 9.4 15a1.7 1.7 0 0 0-1.56-1.04H7.8v-2h.04A1.7 1.7 0 0 0 9.4 10.9a1.7 1.7 0 0 0-.34-1.88L9 8.96 10.42 7.54l.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 13.4 6.4V6.3h2v.1a1.7 1.7 0 0 0 1.04 1.54 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.42 1.42-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.04H21v2h-.04A1.7 1.7 0 0 0 19.4 15Z"/></svg>
+      </button>
     </header>
 
     <main id="main" class="main hidden" aria-live="polite"></main>
 
     <nav id="tabbar" class="tabbar hidden" aria-label="メインナビゲーション">
-      <button data-tab="home" class="tab active"><span class="nav-icon">⌂</span><small>Home</small></button>
-      <button data-tab="crops" class="tab"><span class="nav-icon">♧</span><small>栽培</small></button>
-      <button data-tab="journal" class="tab"><span class="nav-icon">▤</span><small>日誌</small></button>
-      <button data-tab="library" class="tab"><span class="nav-icon">▱</span><small>図鑑</small></button>
+      <button data-tab="home" class="tab active">
+        <svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10h-6v-6H9v6H3Z"/></svg><small>Home</small>
+      </button>
+      <button data-tab="crops" class="tab">
+        <svg viewBox="0 0 24 24"><path d="M12 21V10"/><path d="M12 13c-5 0-8-3-8-8 5 0 8 3 8 8Z"/><path d="M12 10c0-4 3-7 8-7 0 5-3 8-8 8Z"/></svg><small>栽培</small>
+      </button>
+      <button data-tab="records" class="tab">
+        <svg viewBox="0 0 24 24"><path d="M5 3h14v18H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><small>記録</small>
+      </button>
+      <button data-tab="library" class="tab">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v19H6.5A2.5 2.5 0 0 1 4 18.5v-14A2.5 2.5 0 0 1 6.5 2Z"/></svg><small>図鑑</small>
+      </button>
     </nav>
-
     <div id="toast" class="toast" role="status"></div>
   </div>
   <script src="app.js"></script>
-  <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));</script>
+  <script>if ('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));</script>
 </body>
 </html>
