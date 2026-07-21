@@ -1,4 +1,5 @@
-const STORAGE={records:'tanyV12Records'};
+const STORAGE={records:'tanyV13Records',weather:'tanyV13Weather'};
+const FARM_LOCATION={name:'姶良市',latitude:31.74,longitude:130.63};
 const defaultRecords=[
   {id:1,date:'7月21日',iso:'2026-07-21',crop:'tomato',types:['harvest','photo'],count:6,memo:'赤く熟した実を収穫。甘みが増してきた。',photo:''},
   {id:2,date:'7月20日',iso:'2026-07-20',crop:'watermelon',types:['observe'],count:0,memo:'保護カゴの中で順調。つるも元気。',photo:''},
@@ -28,13 +29,19 @@ function navigate(route,root=false,data={}){if(!root)state.history.push(state.ro
 function back(){state.route=state.history.pop()||'home';render()}
 function title(r){return({home:'Home',crops:'栽培',cropDetail:'栽培',records:'記録',recordNew:'今日の記録',recordDetail:'記録',library:'図鑑',libraryCrop:'育った物語',settings:'設定',aiSettings:'AI設定',privacy:'データとプライバシー',appearance:'表示'})[r]||''}
 function render(){const root=['home','crops','records','library'].includes(state.route);$('#pageTitle').textContent=title(state.route);$('#backButton').classList.toggle('hidden',root);$('#settingsButton').classList.toggle('hidden',state.route!=='home');tabbar.classList.toggle('hidden',!root);document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===state.route));const fn={home:renderHome,crops:renderCrops,cropDetail:renderCropDetail,records:renderRecords,recordNew:renderRecordNew,recordDetail:renderRecordDetail,library:renderLibrary,libraryCrop:renderLibraryCrop,settings:renderSettings,aiSettings:renderAISettings,privacy:renderPrivacy,appearance:renderAppearance}[state.route];fn()}
-function renderHome(){main.innerHTML=`
-  <section class="home-welcome">
-    <div class="welcome-copy"><span class="season-pill">夏のtany農園</span><h2>おはようございます。</h2><p>今日の畑には、小さな楽しみが待っています。</p></div>
-    <div class="guide-frame wife-art"><img src="assets/tanimans-illustration.jpg" alt="妻が描いたTanimas blogの夫婦イラスト"><span>妻が描いた、tany農園の原点</span></div>
+function renderHome(){
+  const hour=new Date().getHours();
+  const greeting=hour<11?'おはようございます。':hour<17?'こんにちは。':'おつかれさまです。';
+  main.innerHTML=`
+  <section class="home-brand" aria-label="tany農園のシンボル">
+    <div class="symbol-frame"><img src="assets/tanimans-illustration.jpg" alt="手をつないだ夫婦の手描きイラスト"></div>
+    <div class="brand-greeting"><span class="season-pill">夏のtany農園</span><h2>${greeting}</h2><p>今日も畑と、いい時間を。</p></div>
+  </section>
+  <section id="weatherCard" class="weather-card" aria-live="polite">
+    <div class="weather-loading"><span class="weather-icon">◌</span><div><strong>${FARM_LOCATION.name}の天気を確認中</strong><small>最新情報を読み込んでいます</small></div></div>
   </section>
   <section class="hero-card home-message">
-    <div class="hero-copy"><span class="hero-label">🌱 今日の畑から</span><h3>トマトが、また少し赤くなっています。</h3><p>朝の涼しいうちに、実の色を見に行くのが楽しみです。</p></div>
+    <div class="hero-copy"><span class="hero-label">✉️ 畑のお便り</span><h3>トマトが、また少し赤くなっています。</h3><p>朝の涼しいうちに、実の色を見に行くのが楽しみです。</p></div>
   </section>
   <div class="section-title"><h2>今日の楽しみ</h2><p>見るだけでも大丈夫</p></div>
   <section class="enjoy-grid">
@@ -45,6 +52,54 @@ function renderHome(){main.innerHTML=`
   <button id="quickRecord" class="quick-record"><span class="round-icon">${iconCamera()}</span><span><strong>今日の記録を残す</strong><small>収穫・作業・写真・メモ</small></span><span class="chev">›</span></button>`;
   main.querySelectorAll('[data-crop]').forEach(b=>b.onclick=()=>navigate('cropDetail',false,{selectedCrop:b.dataset.crop}));
   $('#quickRecord').onclick=()=>startRecord();
+  loadWeather();
+}
+function weatherText(code){
+  if(code===0)return['☀️','晴れ'];
+  if([1,2].includes(code))return['🌤️','晴れ時々くもり'];
+  if(code===3)return['☁️','くもり'];
+  if([45,48].includes(code))return['🌫️','霧'];
+  if([51,53,55,56,57].includes(code))return['🌦️','霧雨'];
+  if([61,63,65,66,67,80,81,82].includes(code))return['🌧️','雨'];
+  if([71,73,75,77,85,86].includes(code))return['🌨️','雪'];
+  if([95,96,99].includes(code))return['⛈️','雷雨'];
+  return['🌿','天気'];
+}
+function weatherAdvice(w){
+  const rain=w.daily.precipitation_probability_max?.[0]??0;
+  const max=w.daily.temperature_2m_max?.[0];
+  const wind=w.current.wind_speed_10m??0;
+  if(rain>=70)return'雨の可能性が高めです。水やりは空の様子を見てから。';
+  if(max>=33)return'暑さが厳しい予報です。作業は朝夕の涼しい時間に。';
+  if(wind>=25)return'風が強めです。支柱やネットの緩みを確認しましょう。';
+  if(rain<=20&&max>=28)return'乾きやすい一日です。土の中まで指で確認すると安心です。';
+  return'畑をゆっくり見られそうな一日です。';
+}
+function renderWeather(w){
+  const card=$('#weatherCard'); if(!card)return;
+  const [icon,label]=weatherText(w.current.weather_code);
+  const updated=new Date(w.current.time);
+  const stamp=`${String(updated.getHours()).padStart(2,'0')}:${String(updated.getMinutes()).padStart(2,'0')}更新`;
+  const max=Math.round(w.daily.temperature_2m_max?.[0]);
+  const min=Math.round(w.daily.temperature_2m_min?.[0]);
+  const rain=Math.round(w.daily.precipitation_probability_max?.[0]??0);
+  card.innerHTML=`<div class="weather-main"><span class="weather-icon">${icon}</span><div class="weather-now"><span>${FARM_LOCATION.name}・${stamp}</span><strong>${label} <b>${Math.round(w.current.temperature_2m)}°</b></strong><small>体感 ${Math.round(w.current.apparent_temperature)}°</small></div><div class="weather-range"><strong>${max}°</strong><span>${min}°</span></div></div><div class="weather-meta"><span>降水 ${rain}%</span><span>湿度 ${Math.round(w.current.relative_humidity_2m)}%</span><span>風 ${Math.round(w.current.wind_speed_10m)}km/h</span></div><p class="weather-advice">${weatherAdvice(w)}</p>`;
+}
+async function loadWeather(force=false){
+  const cached=read(STORAGE.weather,null);
+  if(cached?.data&&Date.now()-cached.savedAt<15*60*1000&&!force){renderWeather(cached.data);return}
+  const params=new URLSearchParams({latitude:FARM_LOCATION.latitude,longitude:FARM_LOCATION.longitude,current:'temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,weather_code,wind_speed_10m',daily:'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset',timezone:'Asia/Tokyo',forecast_days:'2'});
+  try{
+    const res=await fetch(`https://api.open-meteo.com/v1/forecast?${params}`,{cache:'no-store'});
+    if(!res.ok)throw new Error('weather');
+    const data=await res.json();
+    write(STORAGE.weather,{savedAt:Date.now(),data}); renderWeather(data);
+  }catch{
+    const card=$('#weatherCard'); if(!card)return;
+    if(cached?.data){renderWeather(cached.data);card.insertAdjacentHTML('beforeend','<small class="weather-offline">通信できないため、前回の天気を表示しています。</small>')}
+    else card.innerHTML='<button id="retryWeather" class="weather-retry"><span>🌥️</span><div><strong>天気を取得できませんでした</strong><small>タップして再読み込み</small></div></button>';
+    $('#retryWeather')?.addEventListener('click',()=>loadWeather(true));
+  }
 }
 function renderCrops(){main.innerHTML=`<section class="greeting"><h2>今、どこまで育った？</h2><p>現在地と、これから残っている工程を一目で確認できます。</p></section><section class="crop-list">${Object.entries(crops).map(([id,c])=>`<button class="crop-row" data-crop="${id}"><span class="crop-visual">${c.emoji}</span><span><span class="stage">${c.stage}</span><h3>${c.name}</h3><p>${c.variety}・${c.place}</p>${timelineHTML(c,true)}<small class="next-stage">次：${c.next} ・ 残り${Math.max(0,c.stages.length-c.current-1)}工程</small></span><span class="chev">›</span></button>`).join('')}</section>`;main.querySelectorAll('[data-crop]').forEach(b=>b.onclick=()=>navigate('cropDetail',false,{selectedCrop:b.dataset.crop}))}
 function renderCropDetail(){const c=crops[state.selectedCrop];const total=c.harvest+state.records.filter(r=>r.crop===state.selectedCrop&&r.types.includes('harvest')&&r.id>10).reduce((sum,r)=>sum+(r.count||0),0);main.innerHTML=`<section class="card detail-hero crop-detail-head"><div class="big-emoji">${c.emoji}</div><span class="stage">${c.stage}</span><h2>${c.name}</h2><p>${c.variety}・${c.place}</p></section><section class="card calendar-card"><div class="calendar-title"><div><span>🌱 栽培カレンダー</span><strong>今と、これから</strong></div><button id="openStage">詳細</button></div>${timelineHTML(c)}<div class="calendar-summary"><div><span>現在</span><strong>${c.stage}</strong></div><div><span>次の節目</span><strong>${c.next}</strong></div><div><span>残り工程</span><strong>${Math.max(0,c.stages.length-c.current-1)}つ</strong></div></div>${stageDetailHTML(c)}</section><section class="card harvest-total"><span>累計収穫</span><strong>${total}${c.unit}</strong><small>${c.outlook}</small></section><section class="card gentle-tip"><span>ワンポイント</span><p>${c.caution}</p></section><div class="button-stack"><button id="recordCrop" class="primary full">この作物を記録する</button><button id="storyCrop" class="secondary full">育った物語を見る</button></div>`;
